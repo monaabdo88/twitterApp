@@ -15,24 +15,46 @@
 </nav>
 
 <div class="container">
-    @if($data)
-        @foreach($data as $key => $val)
-            <div class="well">
-                <h3>{{$val['text']}}
-                <i class="glyphicon glyphicon-heart"></i> {{$val['favorite_count']}}
-                    <i class="glyphicon glyphicon-repeat"></i> {{$val['retweet_count']}}
-                </h3>
-                @if($val['extended_entities']['media'])
-                    @foreach($val['extended_entities']['media'] as $i)
-                        <img src="{{$i['media_url_https']}}"  class="img-thumbnail img-responsive"/>
-                        @endforeach
-                    @endif
-            </div>
+    <form class="well" action="{{route('post.tweet')}}" method="post" enctype="multipart/form-data">
+        {{csrf_field()}}
+        @if(count($errors) > 0)
+            @foreach($errors->all() as $error)
+                <div class="alert alert-danger">
+                    {{$error}}
+                </div>
             @endforeach
-        @else
-        <div class="alert alert-danger"> No Tweets Found</div>
-    @endif
+        @endif
 
+        <div class="form-group">
+            <label>Tweet Text</label>
+            <input type="text" name="tweet" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>Upload Images</label>
+            <input type="file" name="images[]" multiple class="form-control">
+        </div>
+        <div class="form-group">
+            <button class="btn btn-success">Create Tweet</button>
+        </div>
+    </form>
+
+    @if(!empty($data))
+        @foreach($data as $key => $tweet)
+            <div class="well">
+                <h3>{{$tweet['text']}}
+                    <i class="glyphicon glyphicon-heart"></i> {{$tweet['favorite_count']}}
+                    <i class="glyphicon glyphicon-repeat"></i> {{$tweet['retweet_count']}}
+                </h3>
+                @if(!empty($tweet['extended_entities']['media']))
+                    @foreach($tweet['extended_entities']['media'] as $i)
+                        <img src="{{$i['media_url_https']}}" style="width:100px;">
+                    @endforeach
+                @endif
+            </div>
+        @endforeach
+    @else
+        <p>No Tweets Found...</p>
+    @endif
 </div>
 </body>
 </html>

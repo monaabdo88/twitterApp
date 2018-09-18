@@ -11,5 +11,5 @@
 |
 */
 
-Route::get('/','TwitterController@tweetUserTimeline');
-Route::post('tweet',['as'=>'post.tweet','uses'=>'TwitterController@tweet']);
+Route::get('/', 'TwitterController@twitterUserTimeLine');
+Route::post('tweet', ['as' => 'post.tweet', 'uses'=>'TwitterController@tweet']);
